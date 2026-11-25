@@ -1,0 +1,326 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VolunTree - Bookmark Test</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>VolunTree - Bookmark Test</h1>
+
+        <p id="auth-status">Checking session...</p>
+
+        <a href="./login-test.html">Login / Manage Account</a>
+    </header>
+
+    <hr>
+
+    <main>
+
+        <nav aria-label="Bookmark navigation">
+            <button id="explore-btn">Explore Volunteers</button>
+            <button id="saved-btn">My Bookmarks</button>
+        </nav>
+
+        <section>
+            <h2 id="section-title">Explore Volunteers</h2>
+
+            <p id="bookmark-count">Total Bookmarks: 0</p>
+
+            <p id="message" role="status" aria-live="polite"></p>
+
+            <div id="volunteer-list">
+                Loading volunteers...
+            </div>
+        </section>
+
+    </main>
+
+    <script type="module">
+
+        import { supabase } from '../js/supabase.js';
+
+        import {
+            getVolunteers
+        } from '../js/volunteers.js';
+
+        import {
+            getBookmarks,
+            toggleBookmark
+        } from '../js/bookmarks.js';
+
+
+        // ========================================
+        // 1. APPLICATION STATE
+        // ========================================
+
+        let currentUser = null;
+        let volunteers = [];
+        let bookmarkedIds = new Set();
+        let currentView = 'explore';
+        let isBusy = false;
+
+
+        // ========================================
+        // 2. HTML ELEMENTS
+        // ========================================
+
+        const authStatus = document.getElementById('auth-status');
+        const volunteerList = document.getElementById('volunteer-list');
+        const bookmarkCount = document.getElementById('bookmark-count');
+        const sectionTitle = document.getElementById('section-title');
+        const message = document.getElementById('message');
+
+        const exploreBtn = document.getElementById('explore-btn');
+        const savedBtn = document.getElementById('saved-btn');
+
+
+        // ========================================
+        // 3. CHECK LOGIN SESSION
+        // ========================================
+
+        async function checkSession() {
+
+            const { data, error } = await supabase.auth.getSession();
+
+            if (error) {
+                throw error;
+            }
+
+            currentUser = data.session?.user ?? null;
+
+            if (currentUser) {
+                authStatus.textContent =
+                    `Access: Logged in (${currentUser.email})`;
+            } else {
+                authStatus.textContent =
+                    'Access: Guest (Not logged in)';
+            }
+        }
+
+
+        // ========================================
+        // 4. LOAD BOOKMARKS
+        // ========================================
+
+        async function loadBookmarks() {
+
+            if (!currentUser) {
+                bookmarkedIds = new Set();
+                return;
+            }
+
+            const bookmarks = await getBookmarks();
+
+            bookmarkedIds = new Set(
+                bookmarks.map(bookmark => bookmark.opportunity_id)
+            );
+        }
+
+
+        // ========================================
+        // 5. RENDER VOLUNTEERS
+        // ========================================
+
+        function renderVolunteers() {
+
+            volunteerList.replaceChildren();
+
+            bookmarkCount.textContent =
+                `Total Bookmarks: ${bookmarkedIds.size}`;
+
+            sectionTitle.textContent =
+                currentView === 'saved'
+                    ? 'My Bookmarks'
+                    : 'Explore Volunteers';
+
+            if (currentView === 'saved' && !currentUser) {
+
+                volunteerList.textContent =
+                    'Please log in to view your bookmarks.';
+
+                return;
+            }
+
+            let displayedVolunteers = volunteers;
+
+            if (currentView === 'saved') {
+
+                displayedVolunteers = volunteers.filter(
+                    volunteer => bookmarkedIds.has(volunteer.id)
+                );
+            }
+
+            if (displayedVolunteers.length === 0) {
+
+                volunteerList.textContent =
+                    currentView === 'saved'
+                        ? 'No available bookmarked volunteers.'
+                        : 'No volunteers available.';
+
+                return;
+            }
+
+            displayedVolunteers.forEach(volunteer => {
+
+                const card = document.createElement('article');
+
+                const title = document.createElement('h3');
+                title.textContent = volunteer.title;
+
+                const category = document.createElement('p');
+                category.textContent =
+                    `Category: ${
+                        volunteer.volunteer_categories?.name_en
+                        ?? 'Uncategorized'
+                    }`;
+
+                const location = document.createElement('p');
+                location.textContent =
+                    `Location: ${volunteer.location ?? '-'}`;
+
+                const scope = document.createElement('p');
+                scope.textContent =
+                    `Scope: ${volunteer.scope ?? '-'}`;
+
+                const bookmarkBtn = document.createElement('button');
+
+                const saved = bookmarkedIds.has(volunteer.id);
+
+                bookmarkBtn.textContent = saved
+                    ? '★ Remove Bookmark'
+                    : '☆ Add Bookmark';
+
+                bookmarkBtn.setAttribute('aria-pressed', String(saved));
+
+                bookmarkBtn.disabled = isBusy;
+
+                bookmarkBtn.addEventListener('click', async () => {
+                    await handleBookmark(volunteer.id);
+                });
+
+                card.append(
+                    title,
+                    category,
+                    location,
+                    scope,
+                    bookmarkBtn
+                );
+
+                volunteerList.append(
+                    card,
+                    document.createElement('hr')
+                );
+            });
+        }
+
+
+        // ========================================
+        // 6. HANDLE BOOKMARK BUTTON
+        // ========================================
+
+        async function handleBookmark(opportunityId) {
+
+            if (isBusy) {
+                return;
+            }
+
+            if (!currentUser) {
+
+                message.textContent =
+                    'Please log in with Google to save bookmarks.';
+
+                return;
+            }
+
+            isBusy = true;
+
+            message.textContent = 'Updating bookmark...';
+
+            renderVolunteers();
+
+            try {
+
+                const saved = await toggleBookmark(opportunityId);
+
+                await loadBookmarks();
+
+                message.textContent = saved
+                    ? 'Bookmark added successfully!'
+                    : 'Bookmark removed successfully!';
+
+            } catch (error) {
+
+                console.error(error);
+
+                message.textContent =
+                    `Bookmark error: ${error.message}`;
+
+            } finally {
+
+                isBusy = false;
+
+                renderVolunteers();
+            }
+        }
+
+
+        // ========================================
+        // 7. NAVIGATION BUTTONS
+        // ========================================
+
+        exploreBtn.addEventListener('click', () => {
+
+            currentView = 'explore';
+
+            message.textContent = '';
+
+            renderVolunteers();
+        });
+
+
+        savedBtn.addEventListener('click', () => {
+
+            currentView = 'saved';
+
+            message.textContent = '';
+
+            renderVolunteers();
+        });
+
+
+        // ========================================
+        // 8. INITIALIZE PAGE
+        // ========================================
+
+        async function initialize() {
+
+            try {
+
+                await checkSession();
+
+                volunteers = await getVolunteers();
+
+                await loadBookmarks();
+
+                renderVolunteers();
+
+            } catch (error) {
+
+                console.error(error);
+
+                volunteerList.textContent =
+                    `Failed to load data: ${error.message}`;
+            }
+        }
+
+        initialize();
+
+    </script>
+
+</body>
+</html>
