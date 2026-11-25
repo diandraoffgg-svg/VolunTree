@@ -1,0 +1,783 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Volunteer Submission Test - VolunTree</title>
+</head>
+
+<body>
+
+    <h1>VolunTree - Volunteer Submission Test</h1>
+
+    <p id="auth-status">Checking session...</p>
+
+    <a href="./login-test.html">Login / Manage Account</a>
+
+    <hr>
+
+    <!-- Guest Message -->
+
+    <section id="guest-message" hidden>
+        <h2>Login Required</h2>
+
+        <p>
+            Please log in with Google before submitting
+            a volunteer opportunity.
+        </p>
+
+        <a href="./login-test.html">Go to Login Page</a>
+    </section>
+
+
+    <!-- Submission Section -->
+
+    <section id="submission-section" hidden>
+
+        <h2>Share a Volunteer Opportunity</h2>
+
+        <p>
+            Your submission will be reviewed before
+            being published on VolunTree.
+        </p>
+
+        <form id="submission-form">
+
+            <!-- General Information -->
+
+            <fieldset>
+
+                <legend>General Information</legend>
+
+                <p>
+                    <label for="title">
+                        Volunteer Title *
+                    </label><br>
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        required
+                    >
+                </p>
+
+                <p>
+                    <label for="organization_name">
+                        Organization Name *
+                    </label><br>
+
+                    <input
+                        type="text"
+                        id="organization_name"
+                        name="organization_name"
+                        required
+                    >
+                </p>
+
+                <p>
+                    <label for="description">
+                        Description *
+                    </label><br>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="5"
+                        cols="40"
+                        required
+                    ></textarea>
+                </p>
+
+                <p>
+                    <label for="category_id">
+                        Volunteer Category *
+                    </label><br>
+
+                    <select
+                        id="category_id"
+                        name="category_id"
+                        required
+                    >
+                        <option value="">
+                            Select category
+                        </option>
+                    </select>
+                </p>
+
+            </fieldset>
+
+
+            <!-- Location and Participation -->
+
+            <fieldset>
+
+                <legend>Location & Participation</legend>
+
+                <p>
+                    <label for="scope">
+                        Scope *
+                    </label><br>
+
+                    <select id="scope" name="scope" required>
+                        <option value="">Select scope</option>
+                        <option value="lokal">Local</option>
+                        <option value="global">Global</option>
+                    </select>
+                </p>
+
+                <p>
+                    <label for="participation_mode">
+                        Participation Mode *
+                    </label><br>
+
+                    <select
+                        id="participation_mode"
+                        name="participation_mode"
+                        required
+                    >
+                        <option value="">Select mode</option>
+                        <option value="online">Online</option>
+                        <option value="offline">Offline</option>
+                        <option value="hybrid">Hybrid</option>
+                    </select>
+                </p>
+
+                <p>
+                    <label for="location">
+                        Location *
+                    </label><br>
+
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        placeholder="City or online location"
+                        required
+                    >
+                </p>
+
+                <p>
+                    <label for="country_code">
+                        Country Code
+                    </label><br>
+
+                    <input
+                        type="text"
+                        id="country_code"
+                        name="country_code"
+                        maxlength="2"
+                        pattern="[A-Za-z]{2}"
+                        placeholder="ID"
+                    >
+
+                    <small>
+                        Required for offline and hybrid.
+                    </small>
+                </p>
+
+            </fieldset>
+
+
+            <!-- Age Eligibility -->
+
+            <fieldset>
+
+                <legend>Age Eligibility</legend>
+
+                <p>
+                    <label for="minimum_age">
+                        Minimum Age *
+                    </label><br>
+
+                    <input
+                        type="number"
+                        id="minimum_age"
+                        name="minimum_age"
+                        min="0"
+                        max="32767"
+                        step="1"
+                        required
+                    >
+                </p>
+
+                <p>
+                    <label for="maximum_age">
+                        Maximum Age
+                    </label><br>
+
+                    <input
+                        type="number"
+                        id="maximum_age"
+                        name="maximum_age"
+                        min="0"
+                        max="32767"
+                        step="1"
+                    >
+                </p>
+
+            </fieldset>
+
+
+            <!-- Funding Information -->
+
+            <fieldset>
+
+                <legend>Funding Information</legend>
+
+                <p>
+                    <label for="funding_type">
+                        Funding Type *
+                    </label><br>
+
+                    <select
+                        id="funding_type"
+                        name="funding_type"
+                        required
+                    >
+                        <option value="">
+                            Select funding type
+                        </option>
+
+                        <option value="free">
+                            100% Free
+                        </option>
+
+                        <option value="fully_funded">
+                            Fully Funded
+                        </option>
+
+                        <option value="partially_funded">
+                            Partially Funded
+                        </option>
+                    </select>
+                </p>
+
+                <p>
+                    <label for="cost_amount">
+                        Participation Cost
+                    </label><br>
+
+                    <input
+                        type="number"
+                        id="cost_amount"
+                        name="cost_amount"
+                        min="0"
+                        step="any"
+                    >
+                </p>
+
+                <p>
+                    <label for="currency_code">
+                        Currency Code
+                    </label><br>
+
+                    <input
+                        type="text"
+                        id="currency_code"
+                        name="currency_code"
+                        maxlength="3"
+                        pattern="[A-Za-z]{3}"
+                        placeholder="IDR"
+                    >
+                </p>
+
+            </fieldset>
+
+
+            <!-- Schedule -->
+
+            <fieldset>
+
+                <legend>Schedule</legend>
+
+                <p>
+                    <label for="start_date">
+                        Start Date
+                    </label><br>
+
+                    <input
+                        type="date"
+                        id="start_date"
+                        name="start_date"
+                    >
+                </p>
+
+                <p>
+                    <label for="end_date">
+                        End Date
+                    </label><br>
+
+                    <input
+                        type="date"
+                        id="end_date"
+                        name="end_date"
+                    >
+                </p>
+
+                <p>
+                    <label for="registration_deadline">
+                        Registration Deadline
+                    </label><br>
+
+                    <input
+                        type="date"
+                        id="registration_deadline"
+                        name="registration_deadline"
+                    >
+                </p>
+
+            </fieldset>
+
+
+            <!-- Additional Information -->
+
+            <fieldset>
+
+                <legend>Additional Information</legend>
+
+                <p>
+                    <label for="registration_url">
+                        Registration URL *
+                    </label><br>
+
+                    <input
+                        type="url"
+                        id="registration_url"
+                        name="registration_url"
+                        placeholder="https://example.com"
+                        required
+                    >
+                </p>
+
+                <p>
+                    <label for="image_url">
+                        Image URL
+                    </label><br>
+
+                    <input
+                        type="url"
+                        id="image_url"
+                        name="image_url"
+                        placeholder="https://example.com/image.jpg"
+                    >
+                </p>
+
+            </fieldset>
+
+            <br>
+
+            <button type="submit" id="submit-btn">
+                Submit Opportunity
+            </button>
+
+            <button type="reset">
+                Reset Form
+            </button>
+
+        </form>
+
+    </section>
+
+    <p id="message" role="status" aria-live="polite"></p>
+
+    <hr>
+
+
+    <!-- Submission History -->
+
+    <section id="history-section" hidden>
+
+        <h2>My Submissions</h2>
+
+        <p id="submission-count"></p>
+
+        <div id="submission-list"></div>
+
+    </section>
+
+
+    <!-- JavaScript -->
+
+    <script type="module">
+
+        import { supabase } from '../js/supabase.js';
+
+        import {
+            getCategories
+        } from '../js/volunteers.js';
+
+        import {
+            submitVolunteer,
+            getMySubmissions
+        } from '../js/submissions.js';
+
+
+        // ========================================
+        // 1. DOM ELEMENTS
+        // ========================================
+
+        const authStatus =
+            document.getElementById('auth-status');
+
+        const guestMessage =
+            document.getElementById('guest-message');
+
+        const submissionSection =
+            document.getElementById('submission-section');
+
+        const historySection =
+            document.getElementById('history-section');
+
+        const form =
+            document.getElementById('submission-form');
+
+        const submitBtn =
+            document.getElementById('submit-btn');
+
+        const message =
+            document.getElementById('message');
+
+        const categorySelect =
+            document.getElementById('category_id');
+
+        const fundingType =
+            document.getElementById('funding_type');
+
+        const costAmount =
+            document.getElementById('cost_amount');
+
+        const currencyCode =
+            document.getElementById('currency_code');
+
+        const participationMode =
+            document.getElementById('participation_mode');
+
+        const countryCode =
+            document.getElementById('country_code');
+
+        const submissionCount =
+            document.getElementById('submission-count');
+
+        const submissionList =
+            document.getElementById('submission-list');
+
+
+        // ========================================
+        // 2. CHECK LOGIN SESSION
+        // ========================================
+
+        async function checkSession() {
+
+            const { data, error } =
+                await supabase.auth.getSession();
+
+            if (error) {
+                throw error;
+            }
+
+            const user = data.session?.user ?? null;
+
+            if (!user) {
+
+                authStatus.textContent =
+                    'Access: Guest (Not logged in)';
+
+                guestMessage.hidden = false;
+                submissionSection.hidden = true;
+                historySection.hidden = true;
+
+                return false;
+            }
+
+            authStatus.textContent =
+                `Logged in as: ${user.email}`;
+
+            guestMessage.hidden = true;
+            submissionSection.hidden = false;
+            historySection.hidden = false;
+
+            return true;
+        }
+
+
+        // ========================================
+        // 3. LOAD CATEGORIES
+        // ========================================
+
+        async function loadCategories() {
+
+            const categories = await getCategories();
+
+            categorySelect.replaceChildren(
+                new Option('Select category', '')
+            );
+
+            categories.forEach(category => {
+
+                const option =
+                    document.createElement('option');
+
+                option.value = category.id;
+                option.textContent = category.name_en;
+
+                categorySelect.appendChild(option);
+
+            });
+        }
+
+
+        // ========================================
+        // 4. DYNAMIC FUNDING INPUTS
+        // ========================================
+
+        function updateFundingFields() {
+
+            const selectedFunding = fundingType.value;
+
+            const isZeroCost =
+                selectedFunding === 'free' ||
+                selectedFunding === 'fully_funded';
+
+            costAmount.readOnly = isZeroCost;
+
+            if (isZeroCost) {
+                costAmount.value = '0';
+            }
+
+            currencyCode.required =
+                selectedFunding === 'partially_funded' &&
+                costAmount.value !== '';
+
+        }
+
+        fundingType.addEventListener(
+            'change',
+            () => {
+                if (
+                    fundingType.value === 'partially_funded' &&
+                    costAmount.value === '0'
+                ) {
+                    costAmount.value = '';
+                }
+
+                updateFundingFields();
+            }
+        );
+
+        costAmount.addEventListener(
+            'input',
+            updateFundingFields
+        );
+
+
+        // ========================================
+        // 5. DYNAMIC COUNTRY REQUIREMENT
+        // ========================================
+
+        function updateCountryRequirement() {
+
+            countryCode.required =
+                participationMode.value === 'offline' ||
+                participationMode.value === 'hybrid';
+
+        }
+
+        participationMode.addEventListener(
+            'change',
+            updateCountryRequirement
+        );
+
+
+        // ========================================
+        // 6. LOAD SUBMISSION HISTORY
+        // ========================================
+
+        async function loadMySubmissions() {
+
+            const submissions = await getMySubmissions();
+
+            submissionList.replaceChildren();
+
+            submissionCount.textContent =
+                `Total submissions: ${submissions.length}`;
+
+            if (submissions.length === 0) {
+
+                submissionList.textContent =
+                    'You have not submitted any opportunities.';
+
+                return;
+            }
+
+            submissions.forEach(submission => {
+
+                const article =
+                    document.createElement('article');
+
+                const title =
+                    document.createElement('h3');
+
+                const organization =
+                    document.createElement('p');
+
+                const status =
+                    document.createElement('p');
+
+                const date =
+                    document.createElement('p');
+
+                title.textContent = submission.title;
+
+                organization.textContent =
+                    `Organization: ${submission.organization_name}`;
+
+                status.textContent =
+                    `Status: ${submission.status.toUpperCase()}`;
+
+                date.textContent =
+                    `Submitted: ${
+                        new Date(
+                            submission.created_at
+                        ).toLocaleString()
+                    }`;
+
+                article.append(
+                    title,
+                    organization,
+                    status,
+                    date,
+                    document.createElement('hr')
+                );
+
+                submissionList.appendChild(article);
+
+            });
+        }
+
+
+        // ========================================
+        // 7. HANDLE FORM SUBMISSION
+        // ========================================
+
+        form.addEventListener('submit', async (event) => {
+
+            event.preventDefault();
+
+            if (submitBtn.disabled) {
+                return;
+            }
+
+            submitBtn.disabled = true;
+
+            submitBtn.textContent = 'Submitting...';
+
+            message.textContent = '';
+
+            try {
+
+                const formData = Object.fromEntries(
+                    new FormData(form).entries()
+                );
+
+                const result =
+                    await submitVolunteer(formData);
+
+                message.textContent =
+                    `Success! "${result.title}" has been submitted. Status: ${result.status}`;
+
+                form.reset();
+
+                updateFundingFields();
+                updateCountryRequirement();
+
+                try {
+                    await loadMySubmissions();
+                } catch (historyError) {
+
+                    console.error(historyError);
+
+                    message.textContent +=
+                        ' Submission saved, but history could not be refreshed.';
+
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+                message.textContent =
+                    `Error: ${error.message}`;
+
+            } finally {
+
+                submitBtn.disabled = false;
+
+                submitBtn.textContent =
+                    'Submit Opportunity';
+
+            }
+
+        });
+
+
+        // ========================================
+        // 8. HANDLE FORM RESET
+        // ========================================
+
+        form.addEventListener('reset', () => {
+
+            setTimeout(() => {
+
+                updateFundingFields();
+                updateCountryRequirement();
+
+            }, 0);
+
+        });
+
+
+        // ========================================
+        // 9. INITIALIZE PAGE
+        // ========================================
+
+        async function initialize() {
+
+            submitBtn.disabled = true;
+
+            try {
+
+                const isLoggedIn = await checkSession();
+
+                if (!isLoggedIn) {
+                    return;
+                }
+
+                await loadCategories();
+
+                await loadMySubmissions();
+
+                updateFundingFields();
+                updateCountryRequirement();
+
+                submitBtn.disabled = false;
+
+            } catch (error) {
+
+                console.error(error);
+
+                message.textContent =
+                    `Initialization error: ${error.message}`;
+
+            }
+        }
+
+        initialize();
+
+    </script>
+
+</body>
+</html>
