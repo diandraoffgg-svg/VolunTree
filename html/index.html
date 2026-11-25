@@ -1,128 +1,547 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VolunTree</title>
+    <meta name="description" content="Discover meaningful volunteering opportunities and grow your positive impact with VolunTree.">
 
-    <!-- Tailwind CSS -->
+    <title>VolunTree | Grow Your Impact</title>
+
+    <link rel="icon" href="../assets/icons/icon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
 
-    <!-- Navbar placement -->
-    <header>
-        <nav>
-            <ul>
-                <li><a href="#home">Home</a></li>
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="navbar" aria-label="Main navigation">
+
+            <a href="#home" class="brand">
+                <img src="../assets/logos/logo.png" alt="VolunTree">
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-active">Home</a></li>
+                <li><a href="#volunteer">Search</a></li>
+                <li><a href="#community">Community</a></li>
+                <li><a href="#resources">Resources</a></li>
                 <li><a href="#about">About</a></li>
-                <li><a href="#volunteer">Volunteer</a></li>
             </ul>
+
+            <ul class="nav-actions">
+                <li>
+                    <button type="button" class="btn btn-outline">
+                        Sign in
+                    </button>
+                </li>
+
+                <li>
+                    <button type="button" class="btn btn-primary">
+                        Register
+                    </button>
+                </li>
+            </ul>
+
         </nav>
     </header>
 
-    <!-- Home section -->
-    <section id="home">
+    <main>
 
-        <h1>Searching for Volunteer Opportunities? Find Them at Voluntree!</h1>
+        <!-- Hero -->
+        <section id="home" class="home-section">
 
-        <p>Just like a tree grows from a tiny seed, meaningful change begins with a single action.
-            Voluntree helps you plant the seeds of kindness by connecting you with volunteering opportunities that matter.
-            Discover your purpose, nurture your passion, and let your positive impact grow.</p>
+            <figure class="hero">
 
-    </section>
+                <section class="hero-slideshow" aria-label="Volunteering photographs">
 
-    <!-- Image wrap section -->
-    <section class="image-gallery w-full overflow-hidden"
-        aria-label="Image gallery">
+                    <ul class="hero-track">
+                        <li class="hero-slide">
+                            <img src="../assets/images/illustrations/sergei-a--heLWtuAN3c-unsplash.jpg" alt="">
+                        </li>
 
-        <ul class="image-slider flex w-max list-none gap-5 pr-5">
+                        <li class="hero-slide">
+                            <img src="../assets/images/illustrations/angelica-hasbon-Kyy4lnV2Kk4-unsplash.jpg" alt="">
+                        </li>
 
-            <!-- Original images -->
-            <li class="shrink-0">
-                <img
-                    src="../assets/images/illustrations/angelica-hasbon-Kyy4lnV2Kk4-unsplash.jpg"
-                    alt="Volunteering activity"
-                    class="h-52 w-80 rounded-xl object-cover">
-            </li>
+                        <li class="hero-slide">
+                            <img src="../assets/images/illustrations/annie-spratt-cVEOh_JJmEE-unsplash.jpg" alt="">
+                        </li>
 
-            <li class="shrink-0">
-                <img
-                    src="../assets/images/illustrations/annie-spratt-cVEOh_JJmEE-unsplash.jpg"
-                    alt="Volunteering activity"
-                    class="h-52 w-80 rounded-xl object-cover">
-            </li>
+                        <li class="hero-slide">
+                            <img src="../assets/images/illustrations/istockphoto-1430371766-612x612.webp" alt="">
+                        </li>
+                    </ul>
 
-            <li class="shrink-0">
-                <img
-                    src="../assets/images/illustrations/sergei-a--heLWtuAN3c-unsplash.jpg"
-                    alt="Volunteering activity"
-                    class="h-52 w-80 rounded-xl object-cover">
-            </li>
+                </section>
 
-            <li class="shrink-0">
-                <img
-                    src="../assets/images/illustrations/istockphoto-1430371766-612x612.webp"
-                    alt="Volunteering activity"
-                    class="h-52 w-80 rounded-xl object-cover">
-            </li>
+                <figcaption class="hero-content">
 
-            <!-- Duplicated images for infinite looping -->
-            <li class="shrink-0" aria-hidden="true">
-                <img
-                    src="../assets/images/illustrations/angelica-hasbon-Kyy4lnV2Kk4-unsplash.jpg"
-                    alt=""
-                    class="h-52 w-80 rounded-xl object-cover">
-            </li>
+                    <p class="eyebrow">
+                        Small actions. Real impact.
+                    </p>
 
-            <li class="shrink-0" aria-hidden="true">
-                <img
-                    src="../assets/images/illustrations/annie-spratt-cVEOh_JJmEE-unsplash.jpg"
-                    alt=""
-                    class="h-52 w-80 rounded-xl object-cover">
-            </li>
+                    <h1>
+                        Grow kindness.
+                        <br>
+                        Make a difference.
+                    </h1>
 
-            <li class="shrink-0" aria-hidden="true">
-                <img
-                    src="../assets/images/illustrations/sergei-a--heLWtuAN3c-unsplash.jpg"
-                    alt=""
-                    class="h-52 w-80 rounded-xl object-cover">
-            </li>
+                    <p class="hero-description">
+                        Your volunteering journey starts here.
+                    </p>
 
-            <li class="shrink-0" aria-hidden="true">
-                <img
-                    src="../assets/images/illustrations/istockphoto-1430371766-612x612.webp"
-                    alt=""
-                    class="h-52 w-80 rounded-xl object-cover">
-            </li>
+                    <a href="#volunteer" class="btn btn-lime">
+                        Explore opportunities
+                        <span aria-hidden="true">↗</span>
+                    </a>
 
-        </ul>
+                </figcaption>
 
-    </section>
+                <!-- Interactive leaf -->
+                <a href="#volunteer"
+                   class="hero-leaf"
+                   aria-label="Explore volunteering opportunities">
 
-    <!-- About section -->
-    <section id="about">
+                    <svg viewBox="0 0 240 160"
+                         fill="currentColor"
+                         aria-hidden="true">
 
-        <h2>About VolunTree</h2>
+                        <path d="M42 113
+                                 C15 35 100 0 167 12
+                                 C195 17 220 15 238 12
+                                 C210 38 217 92 166 125
+                                 C118 160 70 147 42 113Z"/>
 
-        <p>VolunTree is a platform dedicated to connecting individuals with volunteer opportunities in their communities.
-            Our mission is to foster a culture of giving and social responsibility by making it easy for people to find and engage in meaningful volunteer work.</p>
+                        <path d="M42 108
+                                 C30 123 15 126 3 128
+                                 L5 137
+                                 C24 134 40 127 54 116Z"/>
 
-    </section>
+                        <path d="M44 113 Q105 65 205 28"
+                              fill="none"
+                              stroke="#527a42"
+                              stroke-width="2.5"
+                              stroke-linecap="round"/>
 
-    <!-- Volunteer section -->
-    <section id="volunteer">
+                    </svg>
 
-        <h2>Find Your Next Adventure!</h2>
+                </a>
 
-        <p>Take a look at some of our featured volunteer events.
-            Your next meaningful experience might be just one click away.</p>
+            </figure>
 
-    </section>
+            <!-- Featured cards -->
+            <aside class="floating-cards" aria-label="Discover more">
+
+                <article class="feature-card">
+
+                    <span class="feature-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.7"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <path d="M20 4c-8 0-14 4-14 10a6 6 0 0 0 6 6c6 0 10-6 8-16Z"/>
+                            <path d="M4 21 16 9"/>
+
+                        </svg>
+                    </span>
+
+                    <h2>Find your passion</h2>
+
+                    <a href="#resources" class="text-link">
+                        Discover your interests
+                        <span aria-hidden="true">↗</span>
+                    </a>
+
+                </article>
+
+                <article class="feature-card feature-card-green">
+
+                    <span class="feature-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.7"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+
+                            <path d="M20 11.5a8 8 0 0 1-8 8 9 9 0 0 1-3.5-.7L4 20l1.2-4.5A8 8 0 1 1 20 11.5Z"/>
+                            <path d="M9 12h6"/>
+                            <path d="M12 9v6"/>
+
+                        </svg>
+                    </span>
+
+                    <h2>Share your story</h2>
+
+                    <a href="#community" class="text-link">
+                        Inspire others
+                        <span aria-hidden="true">↗</span>
+                    </a>
+
+                </article>
+
+            </aside>
+
+            <!-- Introduction -->
+            <article class="introduction page-container">
+
+                <p class="eyebrow">
+                    Rooted in kindness
+                </p>
+
+                <h2 class="section-title">
+                    Every little action can grow
+                    <br class="desktop-break">
+                    into something <em>bigger.</em>
+                </h2>
+
+                <p class="section-description">
+                    Just like a tree grows from a tiny seed, meaningful
+                    change begins with a single action. VolunTree helps
+                    you plant the seeds of kindness by connecting you
+                    with volunteering opportunities that matter.
+                    Discover your purpose, nurture your passion,
+                    and let your positive impact grow.
+                </p>
+
+                <a href="#volunteer" class="text-link intro-link">
+                    Find your next opportunity
+                    <span aria-hidden="true">↗</span>
+                </a>
+
+            </article>
+
+        </section>
+
+        <!-- Scrolling image gallery -->
+        <section class="gallery-section" aria-label="Volunteering image gallery">
+
+            <ul class="image-slider">
+
+                <li>
+                    <img src="../assets/images/illustrations/angelica-hasbon-Kyy4lnV2Kk4-unsplash.jpg"
+                         alt="Volunteering activity">
+                </li>
+
+                <li>
+                    <img src="../assets/images/illustrations/annie-spratt-cVEOh_JJmEE-unsplash.jpg"
+                         alt="Volunteering activity">
+                </li>
+
+                <li>
+                    <img src="../assets/images/illustrations/sergei-a--heLWtuAN3c-unsplash.jpg"
+                         alt="Volunteering activity">
+                </li>
+
+                <li>
+                    <img src="../assets/images/illustrations/istockphoto-1430371766-612x612.webp"
+                         alt="Volunteering activity">
+                </li>
+
+                <li>
+                    <img src="../assets/images/illustrations/kazuend-19SC2oaVZW0-unsplash.jpg"
+                         alt="Nature and the environment">
+                </li>
+
+                <li>
+                    <img src="../assets/images/illustrations/vitaly-gariev-eXe186bFR5Q-unsplash.jpg"
+                         alt="Community activity">
+                </li>
+
+                <!-- Repeat images for a seamless loop -->
+                <li aria-hidden="true">
+                    <img src="../assets/images/illustrations/angelica-hasbon-Kyy4lnV2Kk4-unsplash.jpg" alt="">
+                </li>
+
+                <li aria-hidden="true">
+                    <img src="../assets/images/illustrations/annie-spratt-cVEOh_JJmEE-unsplash.jpg" alt="">
+                </li>
+
+                <li aria-hidden="true">
+                    <img src="../assets/images/illustrations/sergei-a--heLWtuAN3c-unsplash.jpg" alt="">
+                </li>
+
+                <li aria-hidden="true">
+                    <img src="../assets/images/illustrations/istockphoto-1430371766-612x612.webp" alt="">
+                </li>
+
+                <li aria-hidden="true">
+                    <img src="../assets/images/illustrations/kazuend-19SC2oaVZW0-unsplash.jpg" alt="">
+                </li>
+
+                <li aria-hidden="true">
+                    <img src="../assets/images/illustrations/vitaly-gariev-eXe186bFR5Q-unsplash.jpg" alt="">
+                </li>
+
+            </ul>
+
+            <p class="gallery-caption">
+                Good things grow together.
+            </p>
+
+        </section>
+
+        <!-- About VolunTree -->
+        <section id="about" class="about-section page-container">
+
+            <figure class="about-image">
+                <img src="../assets/images/illustrations/jason-hu-4-IDNh_Wxi4-unsplash.jpg"
+                     alt="A meaningful moment in the community"
+                     loading="lazy">
+
+                <figcaption>
+                    Small steps, lasting change.
+                </figcaption>
+            </figure>
+
+            <article class="about-content">
+
+                <p class="eyebrow">
+                    Get to know us
+                </p>
+
+                <h2 class="section-title">
+                    A little kindness.
+                    <br>
+                    A <em>greener future.</em>
+                </h2>
+
+                <p class="section-description">
+                    VolunTree is a platform dedicated to connecting
+                    individuals with meaningful volunteering opportunities,
+                    both locally and globally.
+                </p>
+
+                <p class="section-description">
+                    We believe everyone deserves the chance to make
+                    a difference, regardless of their background
+                    or experience.
+                </p>
+
+                <a href="#volunteer" class="btn btn-primary">
+                    Start your journey
+                    <span aria-hidden="true">↗</span>
+                </a>
+
+            </article>
+
+        </section>
+
+        <!-- Volunteer opportunities -->
+        <section id="volunteer" class="volunteer-section page-container">
+
+            <header class="section-heading">
+
+                <p class="eyebrow">
+                    Explore. Connect. Grow.
+                </p>
+
+                <h2 class="section-title">
+                    Find your next <em>adventure.</em>
+                </h2>
+
+                <p class="section-description">
+                    There are countless ways to make a difference.
+                    Find an opportunity that feels right for you.
+                </p>
+
+            </header>
+
+            <ul class="opportunity-grid">
+
+                <li>
+                    <article class="opportunity-card">
+
+                        <figure>
+                            <img src="../assets/images/illustrations/kazuend-19SC2oaVZW0-unsplash.jpg"
+                                 alt="Natural environment"
+                                 loading="lazy">
+                        </figure>
+
+                        <section class="opportunity-content">
+                            <p class="category-label">Environment</p>
+
+                            <h3>Care for our planet</h3>
+
+                            <p>
+                                Protect nature and help create
+                                a more sustainable future.
+                            </p>
+                        </section>
+
+                    </article>
+                </li>
+
+                <li>
+                    <article class="opportunity-card">
+
+                        <figure>
+                            <img src="../assets/images/illustrations/annie-spratt-cVEOh_JJmEE-unsplash.jpg"
+                                 alt="Community volunteering"
+                                 loading="lazy">
+                        </figure>
+
+                        <section class="opportunity-content">
+                            <p class="category-label">Community</p>
+
+                            <h3>Make someone smile</h3>
+
+                            <p>
+                                Bring people together and create
+                                meaningful connections.
+                            </p>
+                        </section>
+
+                    </article>
+                </li>
+
+                <li>
+                    <article class="opportunity-card">
+
+                        <figure>
+                            <img src="../assets/images/illustrations/angelica-hasbon-Kyy4lnV2Kk4-unsplash.jpg"
+                                 alt="Volunteering experience"
+                                 loading="lazy">
+                        </figure>
+
+                        <section class="opportunity-content">
+                            <p class="category-label">Social impact</p>
+
+                            <h3>Be part of the change</h3>
+
+                            <p>
+                                Support meaningful causes and
+                                turn your compassion into action.
+                            </p>
+                        </section>
+
+                    </article>
+                </li>
+
+            </ul>
+
+        </section>
+
+        <!-- Interest quiz -->
+        <section id="resources" class="quiz-section page-container">
+
+            <article class="quiz-banner">
+
+                <p class="eyebrow">
+                    Discover your interests
+                </p>
+
+                <h2 class="section-title">
+                    So many ways to make a difference,
+                    <em>but which one is yours?</em>
+                </h2>
+
+                <p>
+                    Discover the volunteering causes that match
+                    your personality, interests, and passions.
+                </p>
+
+                <!-- Connect this button to the quiz page later -->
+                <button type="button" class="btn btn-lime">
+                    Find your passion
+                    <span aria-hidden="true">↗</span>
+                </button>
+
+                <svg class="quiz-decoration"
+                     viewBox="0 0 240 160"
+                     fill="currentColor"
+                     aria-hidden="true">
+
+                    <path d="M42 113
+                             C15 35 100 0 167 12
+                             C195 17 220 15 238 12
+                             C210 38 217 92 166 125
+                             C118 160 70 147 42 113Z"/>
+
+                    <path d="M42 108
+                             C30 123 15 126 3 128
+                             L5 137
+                             C24 134 40 127 54 116Z"/>
+
+                </svg>
+
+            </article>
+
+        </section>
+
+        <!-- Community -->
+        <section id="community" class="community-section page-container">
+
+            <p class="eyebrow">
+                Stories that inspire
+            </p>
+
+            <h2 class="section-title">
+                Your experience <em>matters.</em>
+            </h2>
+
+            <p class="section-description">
+                Every volunteering journey has a story worth sharing.
+                Inspire others through your experiences, lessons,
+                and little moments of kindness.
+            </p>
+
+            <!-- Connect this button to experience sharing later -->
+            <button type="button" class="btn btn-outline">
+                Share your experience
+                <span aria-hidden="true">↗</span>
+            </button>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+
+        <section class="footer-content page-container">
+
+            <article class="footer-brand">
+
+                <a href="#home">
+                    <img src="../assets/logos/logo.png" alt="VolunTree">
+                </a>
+
+                <p>
+                    Plant kindness. Grow impact.
+                </p>
+
+            </article>
+
+            <nav aria-label="Footer navigation">
+                <ul class="footer-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#volunteer">Explore</a></li>
+                    <li><a href="#community">Community</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </nav>
+
+        </section>
+
+        <p class="copyright">
+            &copy; 2026 VolunTree. Made for a better tomorrow.
+        </p>
+
+    </footer>
 
 </body>
 </html>
