@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>VolunTree - Volunteer Test</title>
+</head>
+<body>
+
+    <h1>VolunTree</h1>
+    <h2>Volunteer Database Test</h2>
+
+    <p id="auth-status">Checking session...</p>
+    <p id="status">Loading volunteers...</p>
+
+    <div id="volunteer-list"></div>
+
+    <script type="module">
+        import { supabase } from '../js/supabase.js';
+        import { getVolunteers } from '../js/volunteers.js';
+
+        const container =
+            document.getElementById('volunteer-list');
+
+        const status =
+            document.getElementById('status');
+
+        const authStatus =
+            document.getElementById('auth-status');
+
+        async function loadVolunteers() {
+            try {
+                const { data, error } =
+                    await supabase.auth.getSession();
+
+                if (error) throw error;
+
+                authStatus.textContent = data.session
+                    ? 'Access: Logged in'
+                    : 'Access: Guest (Not logged in)';
+
+                const volunteers = await getVolunteers();
+
+                status.textContent =
+                    `${volunteers.length} volunteers found`;
+
+                volunteers.forEach(volunteer => {
+                    const card =
+                        document.createElement('article');
+
+                    const title =
+                        document.createElement('h3');
+
+                    title.textContent = volunteer.title;
+
+                    const category =
+                        document.createElement('p');
+
+                    category.textContent =
+                        'Category: ' +
+                        (volunteer.volunteer_categories?.name_en
+                        || 'Uncategorized');
+
+                    const scope =
+                        document.createElement('p');
+
+                    scope.textContent =
+                        'Scope: ' + volunteer.scope;
+
+                    const location =
+                        document.createElement('p');
+
+                    location.textContent =
+                        'Location: ' + volunteer.location;
+
+                    card.append(
+                        title,
+                        category,
+                        scope,
+                        location
+                    );
+
+                    container.append(
+                        card,
+                        document.createElement('hr')
+                    );
+                });
+
+            } catch (error) {
+                status.textContent =
+                    'Error: ' + error.message;
+
+                console.error(error);
+            }
+        }
+
+        loadVolunteers();
+    </script>
+
+</body>
+</html>
