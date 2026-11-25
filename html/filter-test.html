@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>VolunTree - Filter Test</title>
+</head>
+<body>
+
+    <h1>VolunTree</h1>
+    <h2>Volunteer Filter Test</h2>
+
+    <form id="filter-form">
+
+        <!-- Scope Filter -->
+        <fieldset>
+            <legend>Scope</legend>
+
+            <label>
+                <input type="radio" name="scope"
+                       value="all" checked>
+                All
+            </label>
+
+            <label>
+                <input type="radio" name="scope"
+                       value="lokal">
+                Local
+            </label>
+
+            <label>
+                <input type="radio" name="scope"
+                       value="global">
+                Global
+            </label>
+        </fieldset>
+
+        <!-- Category Filter -->
+        <fieldset>
+            <legend>Volunteer Category</legend>
+
+            <div id="category-filters">
+                Loading categories...
+            </div>
+        </fieldset>
+
+        <!-- Age Filter -->
+        <fieldset>
+            <legend>Age Eligibility</legend>
+
+            <label>
+                <input type="radio" name="age"
+                       value="all" checked>
+                All Ages
+            </label>
+
+            <label>
+                <input type="radio" name="age"
+                       value="teen">
+                Teenager Friendly
+            </label>
+
+            <label>
+                <input type="radio" name="age"
+                       value="adult">
+                Adult Only
+            </label>
+        </fieldset>
+
+        <!-- Funding Filter -->
+        <fieldset>
+            <legend>Cost & Funding</legend>
+
+            <label>
+                <input type="checkbox" name="funding"
+                       value="free">
+                100% Free
+            </label>
+
+            <label>
+                <input type="checkbox" name="funding"
+                       value="fully_funded">
+                Fully Funded
+            </label>
+
+            <label>
+                <input type="checkbox" name="funding"
+                       value="partially_funded">
+                Partially Funded
+            </label>
+        </fieldset>
+
+        <button type="reset">Reset Filters</button>
+
+    </form>
+
+    <hr>
+
+    <p id="result-count">Loading volunteers...</p>
+
+    <div id="volunteer-list"></div>
+
+    <script type="module">
+
+        import {
+            getVolunteers,
+            getCategories
+        } from '../js/volunteers.js';
+
+        import {
+            applyFilters
+        } from '../js/filters.js';
+
+        const form =
+            document.getElementById('filter-form');
+
+        const categoryContainer =
+            document.getElementById('category-filters');
+
+        const volunteerContainer =
+            document.getElementById('volunteer-list');
+
+        const resultCount =
+            document.getElementById('result-count');
+
+        let allVolunteers = [];
+
+        // Menampilkan kategori dari Supabase
+        function renderCategories(categories) {
+
+            categoryContainer.replaceChildren();
+
+            categories.forEach(category => {
+
+                const label =
+                    document.createElement('label');
+
+                const checkbox =
+                    document.createElement('input');
+
+                checkbox.type = 'checkbox';
+                checkbox.name = 'category';
+                checkbox.value = category.id;
+
+                label.append(
+                    checkbox,
+                    ' ' + category.name_en
+                );
+
+                categoryContainer.append(
+                    label,
+                    document.createElement('br')
+                );
+            });
+        }
+
+        // Menampilkan daftar volunteer
+        function renderVolunteers(volunteers) {
+
+            volunteerContainer.replaceChildren();
+
+            resultCount.textContent =
+                `${volunteers.length} volunteers found`;
+
+            if (volunteers.length === 0) {
+
+                volunteerContainer.textContent =
+                    'No volunteers found. Try adjusting your filters.';
+
+                return;
+            }
+
+            const fundingLabels = {
+                free: '100% Free',
+                fully_funded: 'Fully Funded',
+                partially_funded: 'Partially Funded'
+            };
+
+            volunteers.forEach(volunteer => {
+
+                const card =
+                    document.createElement('article');
+
+                const title =
+                    document.createElement('h3');
+
+                title.textContent = volunteer.title;
+
+                const details = [
+                    'Category: ' +
+                    (volunteer.volunteer_categories?.name_en
+                        || 'Uncategorized'),
+
+                    'Scope: ' +
+                    (volunteer.scope === 'lokal'
+                        ? 'Local'
+                        : volunteer.scope || 'Unknown'),
+
+                    'Location: ' +
+                    (volunteer.location || 'Unknown'),
+
+                    'Age: ' +
+                    (volunteer.minimum_age ?? 'Unknown') +
+                    ' - ' +
+                    (volunteer.maximum_age ?? 'Not specified'),
+
+                    'Funding: ' +
+                    (fundingLabels[volunteer.funding_type]
+                        || 'Unknown')
+                ];
+
+                card.append(title);
+
+                details.forEach(detail => {
+
+                    const paragraph =
+                        document.createElement('p');
+
+                    paragraph.textContent = detail;
+
+                    card.append(paragraph);
+                });
+
+                volunteerContainer.append(
+                    card,
+                    document.createElement('hr')
+                );
+            });
+        }
+
+        // Membaca pilihan filter pengguna
+        function updateFilters() {
+
+            const formData = new FormData(form);
+
+            const filters = {
+                scope: formData.get('scope'),
+                categories: formData.getAll('category'),
+                age: formData.get('age'),
+                funding: formData.getAll('funding')
+            };
+
+            const filteredVolunteers =
+                applyFilters(allVolunteers, filters);
+
+            renderVolunteers(filteredVolunteers);
+        }
+
+        // Memuat data dari Supabase
+        async function initialize() {
+
+            try {
+
+                const [volunteers, categories] =
+                    await Promise.all([
+                        getVolunteers(),
+                        getCategories()
+                    ]);
+
+                allVolunteers = volunteers;
+
+                renderCategories(categories);
+
+                updateFilters();
+
+                // Filter otomatis ketika pilihan berubah
+                form.addEventListener(
+                    'change',
+                    updateFilters
+                );
+
+                // Mengembalikan seluruh filter
+                form.addEventListener('reset', () => {
+                    setTimeout(updateFilters, 0);
+                });
+
+            } catch (error) {
+
+                resultCount.textContent =
+                    'Error: ' + error.message;
+
+                console.error(error);
+            }
+        }
+
+        initialize();
+
+    </script>
+
+</body>
+</html>
