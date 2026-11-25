@@ -1,8 +1,57 @@
+/* Image gallery container */
+.image-gallery {
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Image slider */
+.image-slider {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    gap: 20px;
+    padding: 0 20px 0 0;
+    margin: 0;
+    list-style: none;
+    animation: slide 20s linear infinite;
+}
+
+/* Individual image items */
+.image-slider li {
+    flex-shrink: 0;
+}
+
+/* Image appearance */
+.image-slider img {
+    display: block;
+    width: max(320px, 25vw);
+    height: 208px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+/* Infinite scrolling animation */
 @keyframes slide {
     from {
         transform: translateX(0);
     }
+
     to {
         transform: translateX(-50%);
-    }   
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .image-slider {
+        animation: none;
+    }
+
+    .image-gallery {
+        overflow-x: auto;
+    }
+
+    .image-slider li[aria-hidden="true"] {
+        display: none;
+    }
 }
