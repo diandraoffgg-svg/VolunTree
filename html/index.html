@@ -3,9 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>VolunTree</title>
+    <!-- Tailwind CSS (CDN untuk development) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./css/style.css">
 </head>
+
 <body>
+<!-- Navbar placement  -->
+ <header>
+    <nav>
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#volunteer">Volunteer</a></li>
+    </ul>
+</nav>
+</header>
+
+<!-- Home section -->
+
+<section id="home">
     
+    <h1>Searching for Volunteer Opportunities? Find Them at Voluntree!</h1>
+    <p>Just like a tree grows from a tiny seed, meaningful change begins with a single action. 
+        Voluntree helps you plant the seeds of kindness by connecting you with volunteering opportunities that matter. 
+        Discover your purpose, nurture your passion, and let your positive impact grow.</p>
+    
+    
+</section>
+
+<!-- image wrap section -->
+<section class="group w-full overflow-hidden"
+aria-label="Image gallery">
+
+    <ul class="flex w-max list-none gap pr-5
+        animate-[slide_20s_linear_infinite]
+        group-hover:[animation-play-state_paused]
+        motion-reduce:animate-none" 
+    >
+        <li class="shrink-0" aria-hidden="true">
+            <img src="" alt="Volunteers planting trees in a community park."
+                class="h-52 w-80 rounded-xl object-cover">
+        </li>
+         <li class="shrink-0" aria-hidden="true">
+            <img src="" alt="Volunteers planting trees in a community park."
+                class="h-52 w-80 rounded-xl object-cover">
+        </li>
+         <li class="shrink-0" aria-hidden="true">
+            <img src="" alt="Volunteers planting trees in a community park."
+                class="h-52 w-80 rounded-xl object-cover">
+        </li>
+         <li class="shrink-0" aria-hidden="true">
+            <img src="" alt="Volunteers planting trees in a community park."
+                class="h-52 w-80 rounded-xl object-cover">
+        </li>
+    </ul>
+</section>
+
+<!-- About section -->
+<section id="about">
+    <h2>About VolunTree</h2>
+   <p>VolunTree is a platform dedicated to connecting individuals with volunteer opportunities in their communities. 
+    Our mission is to foster a culture of giving and social responsibility by making it easy for people to find and engage in meaningful volunteer work.</p>
+</section>
+
+<!-- Volunteer section -->
+<section id="volunteer">
+    <h2>Find Your Next Adventure!</h2>
+    <p>Take a look at some of our featured volunteer events. 
+        Your next meaningful experience might be just one click away.</p>
+</section>
 </body>
-</html>
+    </html>
