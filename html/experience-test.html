@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Experience Sharing Test | VolunTree</title>
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header>
+
+        <h1>VolunTree Experience Sharing</h1>
+
+        <p id="auth-status">Checking authentication...</p>
+
+        <a href="./login-test.html">
+            Login / Manage Account
+        </a>
+
+    </header>
+
+    <hr>
+
+    <main>
+
+        <!-- PUBLIC EXPERIENCES -->
+
+        <section>
+
+            <h2>Community Experiences</h2>
+
+            <p id="experience-count">
+                Loading experiences...
+            </p>
+
+            <div id="experience-list"></div>
+
+        </section>
+
+        <hr>
+
+        <!-- EXPERIENCE DETAIL -->
+
+        <section id="experience-detail" hidden>
+
+            <h2>Experience Detail</h2>
+
+            <div id="detail-content"></div>
+
+            <button type="button" id="close-detail">
+                Close Detail
+            </button>
+
+        </section>
+
+        <!-- GUEST MESSAGE -->
+
+        <section id="guest-message" hidden>
+
+            <h2>Share Your Experience</h2>
+
+            <p>
+                You must log in to share your volunteering
+                experiences or tips.
+            </p>
+
+            <a href="./login-test.html">
+                Login with Google
+            </a>
+
+        </section>
+
+        <!-- SUBMISSION SECTION -->
+
+        <section id="submission-section" hidden>
+
+            <h2>Share Your Experience</h2>
+
+            <form id="experience-form">
+
+                <!-- TITLE -->
+
+                <label for="title">Title *</label>
+
+                <br>
+
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    required
+                >
+
+                <br><br>
+
+                <!-- POST TYPE -->
+
+                <label for="post-type">Post Type *</label>
+
+                <br>
+
+                <select
+                    id="post-type"
+                    name="post_type"
+                    required
+                >
+
+                    <option value="">
+                        Select post type
+                    </option>
+
+                    <option value="experience">
+                        Volunteer Experience
+                    </option>
+
+                    <option value="tips">
+                        Tips &amp; Tricks
+                    </option>
+
+                </select>
+
+                <br><br>
+
+                <!-- CATEGORY -->
+
+                <label for="category">Category *</label>
+
+                <br>
+
+                <select
+                    id="category"
+                    name="category_id"
+                    required
+                >
+
+                    <option value="">
+                        Select category
+                    </option>
+
+                </select>
+
+                <br><br>
+
+                <!-- CONTENT -->
+
+                <label for="content">Content *</label>
+
+                <br>
+
+                <textarea
+                    id="content"
+                    name="content"
+                    rows="8"
+                    cols="35"
+                    required
+                ></textarea>
+
+                <br><br>
+
+                <!-- IMAGE URL -->
+
+                <label for="image-url">
+                    Image URL (Optional)
+                </label>
+
+                <br>
+
+                <input
+                    type="url"
+                    id="image-url"
+                    name="image_url"
+                    placeholder="https://example.com/image.jpg"
+                >
+
+                <br><br>
+
+                <!-- SUBMIT BUTTON -->
+
+                <button
+                    type="submit"
+                    id="submit-button"
+                    disabled
+                >
+                    Submit Experience
+                </button>
+
+            </form>
+
+            <p id="submission-message" role="status"></p>
+
+        </section>
+
+        <hr>
+
+        <!-- MY EXPERIENCES -->
+
+        <section id="history-section" hidden>
+
+            <h2>My Experiences</h2>
+
+            <p id="history-count">
+                Loading your experiences...
+            </p>
+
+            <div id="history-list"></div>
+
+        </section>
+
+    </main>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script type="module">
+
+        import { supabase }
+            from '../js/supabase.js';
+
+        import { getCategories }
+            from '../js/volunteers.js';
+
+        import {
+
+            getExperiences,
+            getExperienceById,
+            submitExperience,
+            getMyExperiences
+
+        } from '../js/experience.js';
+
+
+        // ========================================
+        // 1. DOM ELEMENTS
+        // ========================================
+
+        const authStatus =
+            document.getElementById('auth-status');
+
+        const experienceCount =
+            document.getElementById('experience-count');
+
+        const experienceList =
+            document.getElementById('experience-list');
+
+        const experienceDetail =
+            document.getElementById('experience-detail');
+
+        const detailContent =
+            document.getElementById('detail-content');
+
+        const closeDetail =
+            document.getElementById('close-detail');
+
+        const guestMessage =
+            document.getElementById('guest-message');
+
+        const submissionSection =
+            document.getElementById('submission-section');
+
+        const historySection =
+            document.getElementById('history-section');
+
+        const experienceForm =
+            document.getElementById('experience-form');
+
+        const categorySelect =
+            document.getElementById('category');
+
+        const submitButton =
+            document.getElementById('submit-button');
+
+        const submissionMessage =
+            document.getElementById('submission-message');
+
+        const historyCount =
+            document.getElementById('history-count');
+
+        const historyList =
+            document.getElementById('history-list');
+
+
+        // ========================================
+        // 2. STATE
+        // ========================================
+
+        let currentUser = null;
+
+        let isSubmitting = false;
+
+
+        // ========================================
+        // 3. CHECK AUTHENTICATION
+        // ========================================
+
+        async function checkSession() {
+
+            const { data, error } =
+                await supabase.auth.getSession();
+
+            if (error) {
+                throw error;
+            }
+
+            currentUser = data.session?.user ?? null;
+
+            if (currentUser) {
+
+                authStatus.textContent =
+                    `Logged in as: ${currentUser.email}`;
+
+                guestMessage.hidden = true;
+
+                submissionSection.hidden = false;
+
+                historySection.hidden = false;
+
+            } else {
+
+                authStatus.textContent =
+                    'Access: Guest (Not logged in)';
+
+                guestMessage.hidden = false;
+
+                submissionSection.hidden = true;
+
+                historySection.hidden = true;
+
+            }
+
+        }
+
+
+        // ========================================
+        // 4. LOAD CATEGORIES
+        // ========================================
+
+        async function loadCategories() {
+
+            const categories = await getCategories();
+
+            categorySelect.replaceChildren();
+
+            const placeholder =
+                document.createElement('option');
+
+            placeholder.value = '';
+
+            placeholder.textContent = 'Select category';
+
+            categorySelect.appendChild(placeholder);
+
+            categories.forEach(category => {
+
+                const option =
+                    document.createElement('option');
+
+                option.value = category.id;
+
+                option.textContent = category.name_en;
+
+                categorySelect.appendChild(option);
+
+            });
+
+            submitButton.disabled = categories.length === 0;
+
+        }
+
+
+        // ========================================
+        // 5. POST TYPE LABEL
+        // ========================================
+
+        function getPostTypeLabel(postType) {
+
+            if (postType === 'experience') {
+                return 'Volunteer Experience';
+            }
+
+            if (postType === 'tips') {
+                return 'Tips & Tricks';
+            }
+
+            return 'Unknown';
+
+        }
+
+
+        // ========================================
+        // 6. CREATE POST ELEMENT
+        // ========================================
+
+        function createPostElement(
+            post,
+            showStatus = false,
+            showDetailButton = false
+        ) {
+
+            const article =
+                document.createElement('article');
+
+            const title =
+                document.createElement('h3');
+
+            title.textContent = post.title;
+
+            const type =
+                document.createElement('p');
+
+            type.textContent =
+                `Type: ${getPostTypeLabel(post.post_type)}`;
+
+            const category =
+                document.createElement('p');
+
+            category.textContent =
+                `Category: ${
+                    post.volunteer_categories?.name_en
+                    ?? 'Uncategorized'
+                }`;
+
+            const content =
+                document.createElement('p');
+
+            content.textContent = post.content ?? '';
+
+            const date =
+                document.createElement('p');
+
+            date.textContent =
+                `Created: ${
+                    post.created_at
+                        ? new Date(
+                            post.created_at
+                          ).toLocaleString()
+                        : '-'
+                }`;
+
+            article.append(
+                title,
+                type,
+                category,
+                content,
+                date
+            );
+
+            if (showStatus) {
+
+                const status =
+                    document.createElement('p');
+
+                status.textContent =
+                    `Status: ${
+                        (post.status ?? 'unknown').toUpperCase()
+                    }`;
+
+                article.appendChild(status);
+
+            }
+
+            if (showDetailButton) {
+
+                const detailButton =
+                    document.createElement('button');
+
+                detailButton.type = 'button';
+
+                detailButton.textContent = 'View Detail';
+
+                detailButton.addEventListener(
+                    'click',
+                    () => showExperienceDetail(post.id)
+                );
+
+                article.appendChild(detailButton);
+
+            }
+
+            article.appendChild(
+                document.createElement('hr')
+            );
+
+            return article;
+
+        }
+
+
+        // ========================================
+        // 7. LOAD PUBLIC EXPERIENCES
+        // ========================================
+
+        async function loadExperiences() {
+
+            const experiences =
+                await getExperiences();
+
+            experienceList.replaceChildren();
+
+            experienceCount.textContent =
+                `Total approved posts: ${experiences.length}`;
+
+            if (experiences.length === 0) {
+
+                experienceList.textContent =
+                    'No approved experiences available yet.';
+
+                return;
+
+            }
+
+            experiences.forEach(post => {
+
+                experienceList.appendChild(
+                    createPostElement(post, false, true)
+                );
+
+            });
+
+        }
+
+
+        // ========================================
+        // 8. SHOW EXPERIENCE DETAIL
+        // ========================================
+
+        async function showExperienceDetail(postId) {
+
+            experienceDetail.hidden = false;
+
+            detailContent.textContent = 'Loading detail...';
+
+            try {
+
+                const post =
+                    await getExperienceById(postId);
+
+                if (!post) {
+
+                    detailContent.textContent =
+                        'Experience not found.';
+
+                    return;
+
+                }
+
+                detailContent.replaceChildren(
+                    createPostElement(post)
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+                detailContent.textContent =
+                    `Error: ${error.message}`;
+
+            }
+
+        }
+
+        closeDetail.addEventListener('click', () => {
+
+            experienceDetail.hidden = true;
+
+            detailContent.replaceChildren();
+
+        });
+
+
+        // ========================================
+        // 9. LOAD MY EXPERIENCES
+        // ========================================
+
+        async function loadMyExperiences() {
+
+            if (!currentUser) {
+                return;
+            }
+
+            const experiences =
+                await getMyExperiences();
+
+            historyList.replaceChildren();
+
+            historyCount.textContent =
+                `Total submissions: ${experiences.length}`;
+
+            if (experiences.length === 0) {
+
+                historyList.textContent =
+                    'You have not submitted any experiences.';
+
+                return;
+
+            }
+
+            experiences.forEach(post => {
+
+                historyList.appendChild(
+                    createPostElement(post, true)
+                );
+
+            });
+
+        }
+
+
+        // ========================================
+        // 10. HANDLE SUBMISSION
+        // ========================================
+
+        experienceForm.addEventListener(
+            'submit',
+            async event => {
+
+                event.preventDefault();
+
+                if (isSubmitting) {
+                    return;
+                }
+
+                if (!currentUser) {
+
+                    submissionMessage.textContent =
+                        'You must log in first.';
+
+                    return;
+
+                }
+
+                isSubmitting = true;
+
+                submitButton.disabled = true;
+
+                submissionMessage.textContent =
+                    'Submitting your experience...';
+
+                try {
+
+                    const formData = Object.fromEntries(
+
+                        new FormData(
+                            experienceForm
+                        ).entries()
+
+                    );
+
+                    const result =
+                        await submitExperience(formData);
+
+                    submissionMessage.textContent =
+                        `Submission successful! Status: ${
+                            result.status.toUpperCase()
+                        }`;
+
+                    experienceForm.reset();
+
+                    try {
+
+                        await loadMyExperiences();
+
+                    } catch (refreshError) {
+
+                        console.error(refreshError);
+
+                        submissionMessage.textContent +=
+                            ' Unable to refresh history.';
+
+                    }
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    submissionMessage.textContent =
+                        `Submission failed: ${error.message}`;
+
+                } finally {
+
+                    isSubmitting = false;
+
+                    submitButton.disabled = false;
+
+                }
+
+            }
+        );
+
+
+        // ========================================
+        // 11. INITIALIZE PAGE
+        // ========================================
+
+        async function initialize() {
+
+            try {
+
+                await checkSession();
+
+                await loadExperiences();
+
+                if (currentUser) {
+
+                    await loadCategories();
+
+                    await loadMyExperiences();
+
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+                submissionMessage.textContent =
+                    `Initialization error: ${error.message}`;
+
+                authStatus.textContent +=
+                    ` | Error: ${error.message}`;
+
+            }
+
+        }
+
+        initialize();
+
+    </script>
+
+</body>
+
+</html>
